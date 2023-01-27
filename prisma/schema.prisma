@@ -8,17 +8,66 @@ datasource db {
 }
 
 model User {
-  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email       String  @unique
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email       String   @unique
   password    String
   firstname   String
   lastname    String
   avatar      String?
   roles       Role[]
   description String?
+  courses     Course[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Course {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String
+  price       Int
+  author      User        @relation(fields: [authorId], references: [id])
+  authorId    String      @db.Uuid
+  tags        CourseTag[]
+  category    Category
+  sections    Section[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Tag {
+  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  value     String
+  courses   CourseTag[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model CourseTag {
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  String   @db.Uuid
+  tag       Tag      @relation(fields: [tagId], references: [id])
+  tagId     String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  @@id([courseId, tagId])
+}
+
+model Section {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  String   @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
   Student
   Teacher
+}
+
+enum Category {
+  Development
+  Design
 }
