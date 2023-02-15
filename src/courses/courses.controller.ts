@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserDecorator } from 'src/decorators/user.decorator';
 import { CoursesService } from './courses.service';
-import { CreateCourseDto } from './dto/courses.dto';
+import { AddChapterToCourseDto, CreateCourseDto } from './dto/courses.dto';
 
 @Controller('courses')
 @ApiTags('courses')
@@ -20,13 +20,25 @@ export class CoursesController {
     return this.coursesService.getByAuthorId(authorId);
   }
 
+  @Get('info/:id')
+  getCourseInfo(@Param('id') id: string) {
+    return this.coursesService.getCourseInfo(id);
+  }
+
   @Get(':id')
-  getById(@Param('id') id: string) {
-    return this.coursesService.getById(id);
+  getCourseWithContent(@Param('id') id: string) {
+    return this.coursesService.getCourseContent(id);
   }
 
   @Post()
-  createCourse(@Body() dto: CreateCourseDto) {
-    return this.coursesService.createCourse(dto);
+  createCourse(@UserDecorator() user, @Body() dto: CreateCourseDto) {
+    return this.coursesService.createCourse(user.id, dto);
   }
+
+  @Post('chapters')
+  addChapter(@Body() dto: AddChapterToCourseDto) {
+    return this.coursesService.addChapterToCourse(dto);
+  }
+
+
 }

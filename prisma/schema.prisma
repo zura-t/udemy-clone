@@ -30,7 +30,7 @@ model Course {
   authorId    String      @db.Uuid
   tags        CourseTag[]
   category    Category
-  sections    Section[]
+  chapters    Chapter[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
@@ -53,13 +53,15 @@ model CourseTag {
   @@id([courseId, tagId])
 }
 
-model Section {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+model Chapter {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title     String
-  course    Course   @relation(fields: [courseId], references: [id])
-  courseId  String   @db.Uuid
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  index     Int
+  course    Course    @relation(fields: [courseId], references: [id])
+  courseId  String    @db.Uuid
+  lectures  Lecture[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 enum Role {
@@ -70,4 +72,18 @@ enum Role {
 enum Category {
   Development
   Design
+  QA
+  Languages
+  Bussiness
+  Marketing
+}
+
+model Lecture {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String
+  index     Int
+  chapter   Chapter  @relation(fields: [chapterId], references: [id])
+  chapterId String   @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
