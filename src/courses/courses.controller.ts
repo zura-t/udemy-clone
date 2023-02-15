@@ -39,6 +39,4 @@ export class CoursesController {
   addChapter(@Body() dto: AddChapterToCourseDto) {
     return this.coursesService.addChapterToCourse(dto);
   }
-
-
 }

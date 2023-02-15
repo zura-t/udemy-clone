@@ -10,7 +10,14 @@ import { LecturesModule } from './lectures/lectures.module';
 import { FilesModule } from './files/files.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, ConfigModule.forRoot(), CoursesModule, LecturesModule, FilesModule],
+  imports: [
+    UsersModule,
+    AuthModule,
+    ConfigModule.forRoot(),
+    CoursesModule,
+    LecturesModule,
+    FilesModule,
+  ],
   controllers: [],
   providers: [
     {

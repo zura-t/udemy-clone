@@ -19,8 +19,7 @@ export class CoursesService {
     return this.prisma.course.findFirst({ where: { id } });
   }
 
-  async getCourseContent(id: string) {
-  }
+  async getCourseContent(id: string) {}
 
   async createCourse(authorId: string, dto: CreateCourseDto): Promise<Course> {
     const { tagsIds, ...dtoToSave } = dto;

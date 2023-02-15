@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Category, CourseTag } from '@prisma/client';
-import { IsEnum, IsNumber, IsNumberString, IsString, IsUUID } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsNumberString,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateCourseDto {
   @ApiProperty()
@@ -15,8 +21,8 @@ export class CreateCourseDto {
   @IsNumber()
   price: number;
 
-  @ApiProperty({isArray: true})
-  @IsUUID('4', {each: true})
+  @ApiProperty({ isArray: true })
+  @IsUUID('4', { each: true })
   tagsIds: string[];
 
   @ApiProperty({ enum: Category })
