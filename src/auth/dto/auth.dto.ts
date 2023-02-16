@@ -38,6 +38,6 @@ export class JWTPayload {
   id: string;
   email: string;
   roles: Role[];
-  iat: number;
-  exp: number;
+  iat?: number;
+  exp?: number;
 }
