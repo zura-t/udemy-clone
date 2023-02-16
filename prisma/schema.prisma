@@ -8,14 +8,15 @@ datasource db {
 }
 
 model User {
-  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email       String  @unique
-  password    String
-  firstname   String
-  lastname    String
-  avatar      String?
-  roles       Role[]
-  description String?
+  id                  String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email               String  @unique
+  password            String
+  currentRefreshToken String?
+  firstname           String
+  lastname            String
+  avatar              String?
+  roles               Role[]
+  description         String?
 }
 
 enum Role {
