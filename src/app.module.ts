@@ -8,6 +8,7 @@ import { JwtStrategy } from './auth/strategies/jwt.strategy';
 import { CoursesModule } from './courses/courses.module';
 import { LecturesModule } from './lectures/lectures.module';
 import { FilesModule } from './files/files.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { FilesModule } from './files/files.module';
     LecturesModule,
     FilesModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,
