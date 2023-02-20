@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  Post,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Res } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -23,28 +16,39 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  register(@Body() dto: RegisterDto, @Res({passthrough: true}) res) {
+  register(@Body() dto: RegisterDto, @Res({ passthrough: true }) res) {
     return this.authService.register(dto, res);
   }
 
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@UserDecorator() user, @Body() dto: LoginDto, @Res({passthrough: true}) res: Response) {
+  login(
+    @UserDecorator() user,
+    @Body() dto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     return this.authService.login(user, res);
   }
 
   @Public()
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
-  refresh(@UserDecorator() user) {
-    return this.authService.generateAccessToken({id: user.id, email: user.email, roles: user.roles});
+  async refresh(@UserDecorator() user) {
+    const access_token = await this.authService.generateAccessToken({
+      id: user.id,
+      email: user.email,
+      roles: user.roles,
+    });
+    return {
+      access_token,
+    }
   }
 
   @ApiBearerAuth()
   @Post('logout')
   @HttpCode(200)
-  async logOut(@UserDecorator() user, @Res({passthrough: true}) res) {
+  async logOut(@UserDecorator() user, @Res({ passthrough: true }) res) {
     return this.authService.logout(user.id, res);
   }
 }

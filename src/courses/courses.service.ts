@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Chapter, Course } from '@prisma/client';
+import { Chapter, Course, Lecture } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { AddChapterToCourseDto, CreateCourseDto } from './dto/courses.dto';
 
@@ -19,7 +19,17 @@ export class CoursesService {
     return this.prisma.course.findFirst({ where: { id } });
   }
 
-  async getCourseContent(id: string) {}
+  async getCourseContent(id: string): Promise<
+    (Chapter & {
+      lectures: Lecture[];
+    })[]
+  > {
+    const course = await this.prisma.course.findFirst({
+      where: { id },
+      select: { chapters: { include: { lectures: true } } },
+    });
+    return course.chapters;
+  }
 
   async createCourse(authorId: string, dto: CreateCourseDto): Promise<Course> {
     const { tagsIds, ...dtoToSave } = dto;
@@ -28,7 +38,7 @@ export class CoursesService {
         ...dtoToSave,
         author: { connect: { id: authorId } },
         tags: {
-          create: tagsIds.length
+          create: tagsIds
             ? tagsIds.map((tagId) => {
                 return { tag: { connect: { id: tagId } } };
               })
@@ -40,8 +50,15 @@ export class CoursesService {
 
   async addChapterToCourse(dto: AddChapterToCourseDto): Promise<Chapter> {
     const { courseId, ...dtoToSave } = dto;
+    const chaptersCount = await this.prisma.chapter.count({
+      where: { courseId: dto.courseId },
+    });
     return this.prisma.chapter.create({
-      data: { ...dtoToSave, course: { connect: { id: courseId } } },
+      data: {
+        ...dtoToSave,
+        index: chaptersCount + 1,
+        course: { connect: { id: courseId } },
+      },
     });
   }
 }

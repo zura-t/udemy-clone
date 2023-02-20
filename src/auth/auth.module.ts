@@ -22,7 +22,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     PrismaService,
     LocalStrategy,
     JwtRefreshTokenStrategy,
-    ConfigService
+    ConfigService,
   ],
 })
 export class AuthModule {}

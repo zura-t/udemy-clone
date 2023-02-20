@@ -11,10 +11,13 @@ export class LecturesService {
     return this.prisma.lecture.findFirst({ where: { id } });
   }
 
-  createLecture(dto: CreateLectureDto): Promise<Lecture> {
+  async createLecture(dto: CreateLectureDto): Promise<Lecture> {
     const { chapterId, ...dtoToSave } = dto;
+    const lecturesCount = await this.prisma.chapter.count({
+      where: { courseId: dto.chapterId },
+    });
     return this.prisma.lecture.create({
-      data: { ...dtoToSave, chapter: { connect: { id: chapterId } } },
+      data: { ...dtoToSave, index: lecturesCount + 1, chapter: { connect: { id: chapterId } } },
     });
   }
 
