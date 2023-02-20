@@ -28,9 +28,6 @@ export class LecturesController {
     return this.lecturesService.createLecture(dto);
   }
 
-  @Post('upload')
-  uploadFile() {}
-
   @Patch('id')
   updateLecture(@Param('id') id: string, @Body() dto) {
     return this.lecturesService.updateLecture(id, dto);

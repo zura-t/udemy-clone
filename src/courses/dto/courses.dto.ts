@@ -4,6 +4,7 @@ import {
   IsEnum,
   IsNumber,
   IsNumberString,
+  IsOptional,
   IsString,
   IsUUID,
 } from 'class-validator';
@@ -23,6 +24,7 @@ export class CreateCourseDto {
 
   @ApiProperty({ isArray: true })
   @IsUUID('4', { each: true })
+  @IsOptional()
   tagsIds: string[];
 
   @ApiProperty({ enum: Category })
@@ -34,10 +36,6 @@ export class AddChapterToCourseDto {
   @ApiProperty()
   @IsString()
   title: string;
-
-  @ApiProperty()
-  @IsNumber()
-  index: number;
 
   @ApiProperty()
   @IsString()

@@ -7,10 +7,6 @@ export class CreateLectureDto {
   title: string;
 
   @ApiProperty()
-  @IsNumber()
-  index: number;
-
-  @ApiProperty()
   @IsUUID('4', { each: true })
   chapterId: string;
 }
