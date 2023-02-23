@@ -26,10 +26,6 @@ export class AuthService {
     dto: RegisterDto,
     res: Response,
   ): Promise<{ access_token: string }> {
-    const userExists = await this.usersService.findUserByEmail(dto.email);
-    if (userExists) {
-      throw new BadRequestException(USER_ALREADY_EXISTS_ERROR);
-    }
     const user = await this.usersService.createUser(dto);
     const payload = {
       id: user.id,
