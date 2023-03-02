@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserDecorator } from 'src/decorators/user.decorator';
+import { ParamsValidationPipe } from '../pipes/params-validation.pipe';
 import { AddRoleDto, UpdateProfileDto } from './dto/users.dto';
 import { GetProfile } from './dto/users.return-dto';
 import { UsersService } from './users.service';
@@ -19,7 +20,7 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Get user by id' })
   @Get(':id')
-  getUserById(@Param('id') id: string) {
+  getUserById(@Param('id', ParamsValidationPipe) id: string) {
     return this.usersService.findUserById(id);
   }
 
