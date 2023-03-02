@@ -5,7 +5,11 @@ import {
 } from '@nestjs/common';
 import { Role, User } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
-import { ROLE_EXISTS_ERROR, USER_NOT_FOUND_ERROR } from './users.constants';
+import {
+  ROLE_EXISTS_ERROR,
+  USER_ALREADY_EXISTS_ERROR,
+  USER_NOT_FOUND_ERROR,
+} from './users.constants';
 import { UpdateProfileDto } from './dto/users.dto';
 import { PrismaService } from '../prisma.service';
 import { RegisterDto } from '../auth/dto/auth.dto';
@@ -16,6 +20,10 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createUser(dto: RegisterDto): Promise<User> {
+    const userExists = await this.findUserByEmail(dto.email);
+    if (userExists) {
+      throw new BadRequestException(USER_ALREADY_EXISTS_ERROR);
+    }
     const { password, role, ...dtoToSave } = dto;
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(dto.password, salt);
@@ -34,7 +42,11 @@ export class UsersService {
   }
 
   async findUserByEmail(email: string): Promise<User> {
-    return await this.prisma.user.findFirst({ where: { email } });
+    const user = await this.prisma.user.findFirst({ where: { email } });
+    if (!user) {
+      throw new NotFoundException(USER_NOT_FOUND_ERROR);
+    }
+    return user;
   }
 
   async setCurrentRefreshToken(refreshToken: string, userId: string) {

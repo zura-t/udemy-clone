@@ -8,4 +8,6 @@ export class GetProfile {
   avatar: string;
   roles: Role[];
   description: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
