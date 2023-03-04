@@ -9,6 +9,7 @@ import { CoursesModule } from './courses/courses.module';
 import { LecturesModule } from './lectures/lectures.module';
 import { FilesModule } from './files/files.module';
 import { AppController } from './app.controller';
+import { ChaptersModule } from './chapters/chapters.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AppController } from './app.controller';
     CoursesModule,
     LecturesModule,
     FilesModule,
+    ChaptersModule,
   ],
   controllers: [AppController],
   providers: [

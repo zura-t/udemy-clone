@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Category, CourseTag } from '@prisma/client';
 import {
   IsEnum,
@@ -32,12 +32,29 @@ export class CreateCourseDto {
   category: Category;
 }
 
-export class AddChapterToCourseDto {
-  @ApiProperty()
+export class UpdateCourseDto {
+  @ApiPropertyOptional()
   @IsString()
-  title: string;
+  @IsOptional()
+  name: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
-  courseId: string;
+  @IsOptional()
+  description: string;
+
+  @ApiPropertyOptional()
+  @IsNumber()
+  @IsOptional()
+  price: number;
+
+  @ApiPropertyOptional({ isArray: true })
+  @IsUUID('4', { each: true })
+  @IsOptional()
+  tagsIds: string[];
+
+  @ApiPropertyOptional({ enum: Category })
+  @IsEnum(Category)
+  @IsOptional()
+  category: Category;
 }

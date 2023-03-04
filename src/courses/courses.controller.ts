@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserDecorator } from 'src/decorators/user.decorator';
 import { CoursesService } from './courses.service';
-import { AddChapterToCourseDto, CreateCourseDto } from './dto/courses.dto';
+import { CreateCourseDto } from './dto/courses.dto';
 
 @Controller('courses')
 @ApiTags('courses')
@@ -16,33 +16,27 @@ export class CoursesController {
     return this.coursesService.getMyCourses(user.id);
   }
 
-  @ApiOperation({ summary: 'Add new role' })
+  @ApiOperation({ summary: 'Get course by author id' })
   @Get('byAuthor/:authorId')
   getByAuthorId(@Param('authorId') authorId: string) {
     return this.coursesService.getByAuthorId(authorId);
   }
 
-  @ApiOperation({ summary: 'Add new role' })
+  @ApiOperation({ summary: 'Get course info' })
   @Get('info/:id')
   getCourseInfo(@Param('id') id: string) {
     return this.coursesService.getCourseInfo(id);
   }
 
-  @ApiOperation({ summary: 'Add new role' })
+  @ApiOperation({ summary: 'Get course content' })
   @Get(':id')
   getCourseWithContent(@Param('id') id: string) {
     return this.coursesService.getCourseContent(id);
   }
 
-  @ApiOperation({ summary: 'Add new role' })
+  @ApiOperation({ summary: 'Create course' })
   @Post()
   createCourse(@UserDecorator() user, @Body() dto: CreateCourseDto) {
     return this.coursesService.createCourse(user.id, dto);
-  }
-
-  @ApiOperation({ summary: 'Add new role' })
-  @Post('chapters')
-  addChapter(@Body() dto: AddChapterToCourseDto) {
-    return this.coursesService.addChapterToCourse(dto);
   }
 }
