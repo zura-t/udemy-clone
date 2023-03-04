@@ -8,11 +8,7 @@ import {
   NotFoundException,
 } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt';
-import {
-  INCORRECT_PASSWORD_ERROR,
-  USER_ALREADY_EXISTS_ERROR,
-} from '../users/users.constants';
-import { USER_NOT_FOUND_ERROR } from 'src/users/users.constants';
+import { UserErrorsCodes } from 'src/errors/errors-codes';
 import { Response } from 'express';
 
 @Injectable()
@@ -45,11 +41,11 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<User> {
     const user = await this.usersService.findUserByEmail(email);
     if (!user) {
-      throw new NotFoundException(USER_NOT_FOUND_ERROR);
+      throw new NotFoundException(UserErrorsCodes.USER_NOT_FOUND_ERROR);
     }
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
-      throw new BadRequestException(INCORRECT_PASSWORD_ERROR);
+      throw new BadRequestException(UserErrorsCodes.INCORRECT_PASSWORD_ERROR);
     }
     return user;
   }

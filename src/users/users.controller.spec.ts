@@ -34,8 +34,8 @@ describe('UsersController', () => {
       avatar: null,
       roles: [Role.Student],
       description: '',
-      createdAt: new Date(), 
-      updatedAt: new Date()
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     jest.spyOn(usersService, 'findUserById').mockResolvedValue(user);
 

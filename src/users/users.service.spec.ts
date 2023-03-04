@@ -4,10 +4,7 @@ import { randomUUID } from 'crypto';
 import { RegisterDto } from '../auth/dto/auth.dto';
 import { PrismaService } from '../prisma.service';
 import { GetProfile } from './dto/users.return-dto';
-import {
-  USER_ALREADY_EXISTS_ERROR,
-  USER_NOT_FOUND_ERROR,
-} from './users.constants';
+import { UserErrorsCodes } from 'src/errors/errors-codes';
 import { UsersService } from './users.service';
 
 describe('UsersService', () => {
@@ -82,7 +79,7 @@ describe('UsersService', () => {
       };
       jest.spyOn(service, 'findUserByEmail').mockResolvedValue(userExists);
       expect(service.createUser(dto)).rejects.toThrowError(
-        USER_ALREADY_EXISTS_ERROR,
+        UserErrorsCodes.USER_ALREADY_EXISTS_ERROR,
       );
     });
   });
@@ -121,7 +118,7 @@ describe('UsersService', () => {
     it('should throw an error if the user not found', async () => {
       jest.spyOn(prismaService.user, 'findFirst').mockResolvedValue(null);
       expect(service.findUserById(userId)).rejects.toThrowError(
-        USER_NOT_FOUND_ERROR,
+        UserErrorsCodes.USER_NOT_FOUND_ERROR,
       );
     });
   });
@@ -149,7 +146,7 @@ describe('UsersService', () => {
     it('should throw an error if the user not found', async () => {
       jest.spyOn(prismaService.user, 'findFirst').mockResolvedValue(null);
       expect(service.findUserByEmail(email)).rejects.toThrowError(
-        USER_NOT_FOUND_ERROR,
+        UserErrorsCodes.USER_NOT_FOUND_ERROR,
       );
     });
   });
